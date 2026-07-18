@@ -21,12 +21,21 @@ cur.execute("""
 """)
 
 cur.execute("""
-    CREATE TABLE IF NOT EXISTS exercises (
+    CREATE TABLE IF NOT EXISTS categories (
         id SERIAL PRIMARY KEY,
         name TEXT NOT NULL UNIQUE,
         rest_seconds INTEGER
     );
 """)
+
+cur.execute("""
+    CREATE TABLE IF NOT EXISTS exercises (
+        id SERIAL PRIMARY KEY,
+        name TEXT NOT NULL UNIQUE,
+        category_id INTEGER REFERENCES categories(id)
+    );
+""")
+
 
 cur.execute("""
     CREATE TABLE IF NOT EXISTS exercise_types (
@@ -53,6 +62,34 @@ cur.execute("""
         weight_kg NUMERIC,
         energy_level INTEGER,
         logged_at TIMESTAMP DEFAULT NOW()
+    );
+""")
+
+cur.execute("""
+    CREATE TABLE IF NOT EXISTS muscles (
+        id SERIAL PRIMARY KEY,
+        name TEXT NOT NULL UNIQUE
+            );
+            """)
+
+cur.execute("""
+    CREATE TABLE IF NOT EXISTS exercise_muscles (
+        exercise_id INTEGER REFERENCES exercises(id),
+        muscle_id INTEGER REFERENCES muscles(id)
+    );
+""")
+
+cur.execute("""
+    CREATE TABLE IF NOT EXISTS equipment (
+        id SERIAL PRIMARY KEY,
+        name TEXT NOT NULL UNIQUE
+    );
+""")
+
+cur.execute("""
+    CREATE TABLE IF NOT EXISTS exercise_equipment (
+        exercise_id INTEGER REFERENCES exercises(id),
+        equipment_id INTEGER REFERENCES equipment(id)
     );
 """)
 
